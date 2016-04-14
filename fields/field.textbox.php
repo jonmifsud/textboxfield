@@ -77,8 +77,8 @@
 		public function createHandle($value, $entry_id) {
 			$handle = Lang::createHandle(strip_tags(html_entity_decode($value)),160);
 
-			if ($this->isHandleLocked($handle, $entry_id)) {
-				if ($this->get('handle_unique') == 'no' || $this->isHandleFresh($handle, $value, $entry_id)) {
+			if ($this->isHandleLocked($handle, $entry_id) && $this->get('handle_unique') == 'yes') {
+				if ($this->isHandleFresh($handle, $value, $entry_id)) {
 					return $this->getCurrentHandle($entry_id);
 				}
 
