@@ -75,10 +75,10 @@
 	-------------------------------------------------------------------------*/
 
 		public function createHandle($value, $entry_id) {
-			$handle = Lang::createHandle(strip_tags(html_entity_decode($value)));
+			$handle = Lang::createHandle(strip_tags(html_entity_decode($value)),160);
 
 			if ($this->isHandleLocked($handle, $entry_id)) {
-				if ($this->isHandleFresh($handle, $value, $entry_id)) {
+				if ($this->get('handle_unique') == 'no' || $this->isHandleFresh($handle, $value, $entry_id)) {
 					return $this->getCurrentHandle($entry_id);
 				}
 
@@ -158,6 +158,7 @@
 			$settings['text_size'] = 'medium';
 			$settings['text_length'] = 0;
 			$settings['text_handle'] = 'yes';
+			$settings['handle_unique'] = 'yes';
 			$settings['text_cdata'] = 'no';
 		}
 
@@ -310,6 +311,29 @@
 			$label->setAttribute('class', 'column');
 			$columns->appendChild($label);
 
+			$input = Widget::Input(
+				"fields[{$order}][handle_unique]",
+				'no', 'hidden'
+			);
+			$columns->appendChild($input);
+
+			$input = Widget::Input(
+				"fields[{$order}][handle_unique]",
+				'yes', 'checkbox'
+			);
+
+			if ($this->get('handle_unique') == 'yes') {
+				$input->setAttribute('checked', 'checked');
+			}
+
+			$label = Widget::Label(
+				__('%s Handles are unique', array(
+					$input->generate()
+				))
+			);
+			$label->setAttribute('class', 'column');
+			$columns->appendChild($label);
+
 			$wrapper->appendChild($columns);
 
 		/*---------------------------------------------------------------------
@@ -334,7 +358,8 @@
 				'text_validator'	=> $this->get('text_validator'),
 				'text_length'		=> max((integer)$this->get('text_length'), 0),
 				'text_cdata'		=> $this->get('text_cdata'),
-				'text_handle'		=> $this->get('text_handle')
+				'text_handle'		=> $this->get('text_handle'),
+				'handle_unique'		=> $this->get('handle_unique')
 			);
 
 			return FieldManager::saveSettings($id, $fields);

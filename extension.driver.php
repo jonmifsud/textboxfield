@@ -63,6 +63,7 @@
 					`text_length` INT(11) UNSIGNED DEFAULT 0,
 					`text_cdata` ENUM('yes', 'no') DEFAULT 'no',
 					`text_handle` ENUM('yes', 'no') DEFAULT 'no',
+					`handle_unique` ENUM('yes', 'no') DEFAULT 'yes',
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
@@ -135,6 +136,13 @@
 			// Text handle:
 			if (!$this->updateHasColumn('text_handle')) {
 				$this->updateAddColumn('text_handle', "ENUM('yes', 'no') DEFAULT 'no' AFTER `text_cdata`");
+			}
+
+			// is handle unique:
+			if (!$this->updateHasColumn('handle_unique')) {
+				$this->updateAddColumn('handle_unique', "ENUM('yes', 'no') DEFAULT 'yes' AFTER `text_handle`");
+				//set default value
+				Symphony::Database()->update(array('handle_unique'=>'yes'),self::FIELD_TABLE);
 			}
 
 			// Add handle index to textbox entry tables:
