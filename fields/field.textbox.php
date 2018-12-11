@@ -838,7 +838,6 @@
 				";
 			}
 
-
 			else if (self::isFilterRegex($data[0])) {
 				$this->buildRegexSQL($data[0], array('value', 'handle'), $joins, $where);
 			}
