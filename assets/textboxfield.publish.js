@@ -18,7 +18,7 @@
 				var remaining = limit - length;
 
 				optional
-					.text(message.replace('$1', remaining).replace('$2', limit))
+					.text(remaining + " of " + limit + " remaining – Optional")
 					.removeClass('invalid');
 
 				if (remaining < 0) {
