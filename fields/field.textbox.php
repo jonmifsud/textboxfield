@@ -554,6 +554,11 @@
 		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
 			if(is_null($data['value'])) return;
 
+			if (is_array($data['value'])){
+				$data['value'] = current($data['value']);
+				$data['value_formatted'] = current($data['value_formatted']);
+			}
+
 			if ($mode == 'unformatted') {
 				$value = trim($data['value']);
 			}
